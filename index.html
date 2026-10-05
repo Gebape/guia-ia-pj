@@ -285,6 +285,11 @@ body{ padding-bottom:calc(30px + env(safe-area-inset-bottom,0px)); }
   *{ -webkit-print-color-adjust:exact; print-color-adjust:exact; }
   html[data-tool="copilot"] #main h3, html[data-tool="copilot"] .pick-title{ background:none !important; color:var(--acc) !important; -webkit-background-clip:border-box; background-clip:border-box; }
 }
+.lang-switch{ display:inline-flex; gap:2px; margin:0 0 1.1rem; padding:3px; border-radius:999px; border:1px solid var(--line); background:var(--paper); }
+.lang-switch a{ font:600 .82rem var(--sans); padding:5px 12px; border-radius:999px; color:var(--muted); text-decoration:none; }
+.lang-switch a[aria-current="true"]{ background:var(--acc); color:var(--paper); }
+.lang-switch a:not([aria-current="true"]):hover{ color:var(--ink); }
+@media print{ .lang-switch{ display:none !important; } }
 </style>
 </head>
 <body>
@@ -293,6 +298,7 @@ body{ padding-bottom:calc(30px + env(safe-area-inset-bottom,0px)); }
 <header class="top">
   <div class="top-in">
     <div class="top-text">
+      <nav class="lang-switch" aria-label="Idioma"><a href="index.html" lang="es" hreflang="es" data-lang="es">Castellano</a><a href="ca.html" lang="ca" hreflang="ca" data-lang="ca">Català</a></nav>
       <p class="kicker">Guía práctica para la Carrera Judicial</p>
       <h1>Primeros pasos<br> con la IA</h1>
       <p class="sub">Nivel básico · Claude, Gemini, Copilot y ChatGPT</p>
@@ -758,6 +764,16 @@ body{ padding-bottom:calc(30px + env(safe-area-inset-bottom,0px)); }
     function upd(){ b.classList.toggle('show', window.scrollY > 700); }
     window.addEventListener('scroll', upd, {passive:true}); upd();
     b.addEventListener('click', function(){ var r=window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches; window.scrollTo({top:0, behavior:r?'auto':'smooth'}); });
+  })();
+
+  (function(){
+    document.querySelectorAll('.lang-switch a').forEach(function(a){
+      if(a.getAttribute('data-lang')===document.documentElement.lang) a.setAttribute('aria-current','true');
+      a.addEventListener('click', function(e){
+        var t=document.documentElement.getAttribute('data-tool');
+        if(t && t!=='none'){ e.preventDefault(); location.href=a.getAttribute('href')+'?ia='+t; }
+      });
+    });
   })();
 </script>
 </body>
