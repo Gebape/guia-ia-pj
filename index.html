@@ -293,7 +293,7 @@ body{ padding-bottom:calc(30px + env(safe-area-inset-bottom,0px)); }
 .hl-fig{ margin:1rem 0 .6rem; }
 .hl-wrap{ position:relative; border:1px solid var(--line); border-radius:10px; overflow:hidden; line-height:0; }
 .hl-wrap img{ width:100%; height:auto; display:block; cursor:default; }
-.hl-box{ position:absolute; border:3px solid #D62828; border-radius:6px; opacity:0; transition:opacity .18s, box-shadow .18s; cursor:pointer; }
+.hl-box{ position:absolute; box-sizing:content-box; padding:3px; margin:-5px 0 0 -5px; border:2px solid #D62828; border-radius:7px; opacity:0; transition:opacity .18s, box-shadow .18s; cursor:pointer; -webkit-tap-highlight-color:transparent; }
 .hl-box:not(.on):hover{ opacity:.55; }
 .hl-box.on{ opacity:1; box-shadow:0 0 0 2000px rgba(15,20,30,.32); }
 tr[data-hl]{ cursor:pointer; }
@@ -607,7 +607,7 @@ tr[data-hl]:focus-visible{ outline:2px solid var(--acc); outline-offset:-2px; }
 </div></details>
 </article>
 </div>
-<footer class="foot"><div class="foot-in">Creado por Gerard Barrera Peñas · Versión 1.1.0</div></footer>
+<footer class="foot"><div class="foot-in">Creado por Gerard Barrera Peñas · Versión 1.1.1</div></footer>
 <script>
 (function(){
   var root=document.documentElement, valid=['claude','gemini','copilot','chatgpt'], NAMES={claude:'Claude',gemini:'Gemini',copilot:'Copilot',chatgpt:'ChatGPT'};
@@ -827,7 +827,9 @@ tr[data-hl]:focus-visible{ outline:2px solid var(--acc); outline-offset:-2px; }
     document.querySelectorAll('tr[data-hl]').forEach(function(tr){
       tr.addEventListener('mouseenter', function(){ if(window.matchMedia('(hover:hover)').matches) show(tr); });
       tr.addEventListener('mouseleave', function(){ if(window.matchMedia('(hover:hover)').matches) clear(); });
-      tr.addEventListener('focus', function(){ show(tr); });
+      tr.addEventListener('pointerdown', function(){ tr._ptr=true; });
+      tr.addEventListener('focus', function(){ if(!tr._ptr) show(tr); });
+      tr.addEventListener('click', function(){ setTimeout(function(){ tr._ptr=false; },0); });
       tr.addEventListener('blur', function(){ clear(); });
       tr.addEventListener('click', function(){ if(current===tr && !window.matchMedia('(hover:hover)').matches) clear(); else show(tr, false, true); });
     });
